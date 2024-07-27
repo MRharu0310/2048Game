@@ -119,8 +119,10 @@ def draw():
             else:
                 if math.log(2**L[4*i+j], 10)<= 2:
                     print("|  ",2**L[4*i+j],end="\t")
-                elif math.log(2**L[4*i+j], 10) > 2:
+                elif 5 > math.log(2**L[4*i+j], 10) > 2:
                     print("| ",2**L[4*i+j],end="\t")
+                else:
+                    print("|",2**L[4*i+j],end="\t")
         print("|",end="\n")
         print("---------------------------------")
     print("Score: ",score," ( +",score_plus,")")
@@ -129,7 +131,7 @@ check_space()
 check_space()
 turn = "None"
 draw()
-while 0 in L or 11 in L:
+while 0 in L:
     Input = input()
     if Input == "A" or Input == "a":
         for i in range(4):
@@ -156,7 +158,5 @@ while 0 in L or 11 in L:
 
 if 0 not in L:
     print("GAME OVER!")
-if 11 in L:
-    print("CLEAR!")
 
 
