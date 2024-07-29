@@ -41,7 +41,11 @@ def check_space():
             E.append(i)
     if len(E) != 0:
         turn = E[random.randint(0,len(E)-1)]
-        L[turn] = random.randint(1,2)
+        a = random.randint(1,5)
+        if a == 1:
+            L[turn] = 2
+        else:
+            L[turn] = 1
 
 def Move(a,b,c,d):
     global Count_Move, score, score_plus
