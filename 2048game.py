@@ -19,6 +19,8 @@ L = []
 for i in range(16):
     L.append(0)
 
+Save = [] #Lの保存用
+
 #空きマスの情報を格納
 E = []
 
@@ -26,7 +28,9 @@ score = 0
 score_plus = 0
 Input = "None"
 Count_Move = 0
-turn = "None"
+turn = 0
+check = 0
+Massage = "None"
 
 #1つの空きマスを2か4にする
 def check_space():
@@ -35,8 +39,9 @@ def check_space():
     for i in range(16):
         if L[i] == 0:
             E.append(i)
-    turn = E[random.randint(0,len(E)-1)]
-    L[turn] = random.randint(1,2)
+    if len(E) != 0:
+        turn = E[random.randint(0,len(E)-1)]
+        L[turn] = random.randint(1,2)
 
 def Move(a,b,c,d):
     global Count_Move, score, score_plus
@@ -103,6 +108,46 @@ def Move(a,b,c,d):
                 L[a] = L[b]
                 L[b] = 0
 
+def count():
+    global check , Save, L, score_plus, score, Count_Move
+    Save = L.copy()
+    check = 0
+    Count_Move = 0
+    for i in range(4):
+        Move(4*i, 4*i+1, 4*i+2, 4*i+3)
+    if Count_Move != 0:
+        check += 1
+    L = Save.copy()
+    Count_Move = 0
+    for i in range(4):
+        Move(4*i+3, 4*i+2, 4*i+1, 4*i)
+    if Count_Move != 0:
+        check += 1
+    L = Save.copy()
+    Count_Move = 0
+    for i in range(4):
+        Move(i, 4+i, 8+i, 12+i)
+    if Count_Move != 0:
+        check += 1
+    L = Save.copy()
+    Count_Move = 0
+    for i in range(4):
+        Move(12+i, 8+i, 4+i, i)
+    if Count_Move != 0:
+        check += 1
+    L = Save.copy()
+    Count_Move = 0
+    
+    if check == 0:
+        score -= score_plus
+        score_plus = 0
+        return 0
+    else:
+        score -= score_plus
+        score_plus = 0
+        return 1
+
+
 def draw():
     global turn
     clear_terminal()
@@ -129,34 +174,58 @@ def draw():
 
 check_space()
 check_space()
-turn = "None"
 draw()
-while 0 in L:
-    Input = input()
-    if Input == "A" or Input == "a":
-        for i in range(4):
-            Move(4*i, 4*i+1, 4*i+2, 4*i+3)
-    elif Input == "D" or Input == "d":
-        for i in range(4):
-            Move(4*i+3, 4*i+2, 4*i+1, 4*i)
-    elif Input == "W" or Input == "w":
-        for i in range(4):
-            Move(i, 4+i, 8+i, 12+i)
-    elif Input == "S" or Input == "s":
-        for i in range(4):
-            Move(12+i, 8+i, 4+i, i)
-    else:
-        print("invalid input")
-    
-    if Count_Move == 0:
-        print("invalid input")
-    else:
-        check_space()
-        draw()
-        Count_Move = 0
-        score_plus = 0
-
-if 0 not in L:
-    print("GAME OVER!")
-
-
+while Massage == "None":
+    while 0 in L:
+        Input = input()
+        if Input == "A" or Input == "a":
+            for i in range(4):
+                Move(4*i, 4*i+1, 4*i+2, 4*i+3)
+        elif Input == "D" or Input == "d":
+            for i in range(4):
+                Move(4*i+3, 4*i+2, 4*i+1, 4*i)
+        elif Input == "W" or Input == "w":
+            for i in range(4):
+                Move(i, 4+i, 8+i, 12+i)
+        elif Input == "S" or Input == "s":
+            for i in range(4):
+                Move(12+i, 8+i, 4+i, i)
+        else:
+            print("invalid input")
+        
+        if Count_Move == 0:
+            print("invalid input")
+        else:
+            check_space()
+            draw()
+            Count_Move = 0
+            score_plus = 0
+    if count() == 0:
+        print("GAME OVER!")
+        break
+    while Massage != "Moved":
+        Input = input()
+        if Input == "A" or Input == "a":
+            for i in range(4):
+                Move(4*i, 4*i+1, 4*i+2, 4*i+3)
+        elif Input == "D" or Input == "d":
+            for i in range(4):
+                Move(4*i+3, 4*i+2, 4*i+1, 4*i)
+        elif Input == "W" or Input == "w":
+            for i in range(4):
+                Move(i, 4+i, 8+i, 12+i)
+        elif Input == "S" or Input == "s":
+            for i in range(4):
+                Move(12+i, 8+i, 4+i, i)
+        else:
+            print("invalid input")
+        
+        if Count_Move== 0:
+            print("invalid input")
+        else:
+            check_space()
+            draw()
+            Count_Move = 0
+            score_plus = 0
+            Massage = "Moved"
+    Massage = "None"
